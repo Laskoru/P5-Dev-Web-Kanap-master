@@ -1,5 +1,8 @@
-const id = window.location.search.split("?id=").join("");
+let id = window.location.search.split("?id=").join("");
+
 let productData = [];
+let i = 0;
+let panierInit = JSON.parse(localStorage.getItem("itemArray")) || [];
 
 const fetchProduct = async () => {
   await fetch(`http://localhost:3000/api/products/${id}`)
@@ -22,7 +25,6 @@ const fetchProduct = async () => {
           "#colors"
         ).innerHTML += `<option value=${color}>${color}</option>`;
       }
-
       document.querySelector("#addToCart").addEventListener("click", () => {
         document.querySelector("#quantity").reportValidity();
         productData.quantity = parseInt(
@@ -35,22 +37,31 @@ const fetchProduct = async () => {
 
         productData.color = document.querySelector("#colors").value;
 
-        let chooseColor = color.options[color.selectedIndex].value;
         const addBacket = () => {
           let addButton = document.querySelector("#addToCart");
           addButton.addEventListener("click", () => {
-            localStorage.setItem(
-              "quantity",
-              document.querySelector("#quantity").value
-            );
-            localStorage.setItem("color", chooseColor);
-            localStorage.setItem(
-              "id",
-              window.location.search.split("?id=").join("")
-            );
-            localStorage.setItem("name", productData.name);
-            alert("Produit(s) ajouté(s) au panier : " + productData.quantity);
-            console.log(localStorage);
+            let majPanier = {
+              id: window.location.search.split("?id=").join(""),
+              color: productData.color,
+              quantity: document.querySelector("#quantity").value,
+            };
+            //  for (let i = 0; i < localStorage.length; i++) {
+            if (
+              panierInit.length == 0 ||
+              (panierInit[i].id !== id &&
+                panierInit[i].color !== productData.color)
+            ) {
+              console.log("true");
+              panierInit.push(majPanier),
+                localStorage.setItem("itemArray", JSON.stringify(panierInit));
+            } else {
+              console.log("false");
+
+              panierInit[i].quantity =
+                parseInt(panierInit[i].quantity) + parseInt(majPanier.quantity);
+              localStorage.setItem("itemArray", JSON.stringify(panierInit));
+            }
+            // }
           });
         };
         addBacket();
