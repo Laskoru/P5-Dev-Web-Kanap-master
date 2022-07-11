@@ -39,31 +39,34 @@ const fetchProduct = async () => {
 
         const addBacket = () => {
           let addButton = document.querySelector("#addToCart");
-          addButton.addEventListener("click", () => {
-            let majPanier = {
-              id: window.location.search.split("?id=").join(""),
-              color: productData.color,
-              quantity: document.querySelector("#quantity").value,
-            };
-            //  for (let i = 0; i < localStorage.length; i++) {
-            if (
-              panierInit.length == 0 ||
-              (panierInit[i].id !== id &&
-                panierInit[i].color !== productData.color)
-            ) {
-              console.log("true");
-              panierInit.push(majPanier),
-                localStorage.setItem("itemArray", JSON.stringify(panierInit));
-            } else {
-              console.log("false");
 
-              panierInit[i].quantity =
-                parseInt(panierInit[i].quantity) + parseInt(majPanier.quantity);
+          let majPanier = {
+            id: window.location.search.split("?id=").join(""),
+            color: productData.color,
+            quantity: document.querySelector("#quantity").value,
+          };
+          // for (let i = 0; i < localStorage.length; i++) {
+          if (
+            panierInit.length == 0 ||
+            (panierInit[i] &&
+              panierInit[i].id &&
+              panierInit[i].id !== id &&
+              panierInit[i].color !== productData.color)
+          ) {
+            console.log("true");
+            panierInit.push(majPanier),
               localStorage.setItem("itemArray", JSON.stringify(panierInit));
-            }
-            // }
-          });
+            i++;
+          } else {
+            console.log("false");
+
+            panierInit[i].quantity =
+              parseInt(panierInit[i].quantity) + parseInt(majPanier.quantity);
+            localStorage.setItem("itemArray", JSON.stringify(panierInit));
+          }
+          console.log(i);
         };
+        // };
         addBacket();
       });
     });
