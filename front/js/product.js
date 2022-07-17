@@ -1,7 +1,7 @@
+// Variable servant à récupérer l'ID de la page html
 let id = window.location.search.split("?id=").join("");
+//
 let productData = [];
-
-//let panierInit = JSON.parse(localStorage.getItem("itemArray")) || [];
 
 const fetchProduct = async () => {
   await fetch(`http://localhost:3000/api/products/${id}`)
@@ -36,9 +36,13 @@ const fetchProduct = async () => {
 
         productData.color = document.querySelector("#colors").value;
 
+        // Fonction servant à sauvegarder le panier dans le localstorage //
+
         function saveBasket(basket) {
           localStorage.setItem("basket", JSON.stringify(basket));
         }
+
+        // Fonction servant à récupérer le panier dans le localstorage //
 
         function getBasket() {
           let basket = localStorage.getItem("basket");
@@ -49,6 +53,7 @@ const fetchProduct = async () => {
             return JSON.parse(basket);
           }
         }
+        // Fonction servant à ajouter des produits dans le localstorage //
 
         function addBasket(product) {
           product = {
@@ -58,31 +63,17 @@ const fetchProduct = async () => {
           };
           let basket = getBasket();
 
-          let foundProduct = basket.find((p) => p.id == product.id);
-          //console.log(foundProduct.id);
-          if (basket.length == 0) {
+          let foundProduct = basket.find(
+            (p) => p.id == id && p.color == productData.color
+          );
+
+          if (foundProduct == undefined) {
             console.log("Premier produit dans le panier");
             basket.push(product);
           } else {
-            //for (let i = 0; i < basket.length; i++) {
-            if (
-              id == foundProduct.id &&
-              productData.color == foundProduct.color
-            ) {
-              console.log("Quantité ajouté");
-              foundProduct.quantity += productData.quantity;
-              localStorage.setItem("basket", JSON.stringify(product));
-            } else if (foundProduct.id == undefined) {
-              basket.push(product);
-            }
-            // }
-            //product.quantity += productData.quantity;
-
-            //basket.push(product);
-
-            //basket.push(product);
+            console.log("Quantité ajouté à un produit existant");
+            foundProduct.quantity += productData.quantity;
           }
-          //}
           saveBasket(basket);
         }
 

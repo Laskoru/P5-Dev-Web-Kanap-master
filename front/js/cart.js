@@ -1,30 +1,30 @@
 let productData = [];
-let panier = [];
+let basket = [];
 let price = 0;
 let totalQuantity = 0;
-panier = JSON.parse(localStorage.getItem("basket"));
+basket = JSON.parse(localStorage.getItem("basket"));
 
-// Message si le panier est vide
-if (panier === null) {
+// Message si le basket est vide
+if (basket === null) {
   document.querySelector(
     "#cartAndFormContainer"
-  ).innerHTML = `<h1>Votre panier est vide</h1>`;
+  ).innerHTML = `<h1>Votre basket est vide</h1>`;
 
-  // Sinon, affichage du panier
+  // Sinon, affichage du basket
 } else {
-  for (i = 0; i < panier.length; i++) {
-    let id = panier[i].id;
-    let quantity = panier[i].quantity;
-    let color = panier[i].color;
+  for (i = 0; i < basket.length; i++) {
+    let id = basket[i].id;
+    let quantity = basket[i].quantity;
+    let color = basket[i].color;
 
     const fetchProduct = async () => {
-      await fetch(`http://localhost:3000/api/products/${panier[i].id}`)
+      await fetch(`http://localhost:3000/api/products/${basket[i].id}`)
         .then((res) => res.json())
         .then((promise) => {
           productData = promise;
           document.querySelector(
             "#cart__items"
-          ).innerHTML += `<article class="cart__item" data-id="${id}" data-color="${panier.color}">
+          ).innerHTML += `<article class="cart__item" data-id="${id}" data-color="${basket.color}">
     <div class="cart__item__img">
       <img src="${productData.imageUrl}" alt="${productData.name}">
     </div>
@@ -57,3 +57,12 @@ if (panier === null) {
     fetchProduct();
   }
 }
+
+function deleteItem() {
+  let deleteItem = document.querySelector("#deleteItem");
+  deleteItem.addEventListener("click", () => {
+    localStorage.removeItem(basket[i]);
+    window.location.reload();
+  });
+}
+onload = deleteItem();
