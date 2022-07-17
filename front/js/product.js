@@ -1,8 +1,7 @@
 let id = window.location.search.split("?id=").join("");
-
 let productData = [];
-let i = 0;
-let panierInit = JSON.parse(localStorage.getItem("itemArray")) || [];
+
+//let panierInit = JSON.parse(localStorage.getItem("itemArray")) || [];
 
 const fetchProduct = async () => {
   await fetch(`http://localhost:3000/api/products/${id}`)
@@ -37,37 +36,57 @@ const fetchProduct = async () => {
 
         productData.color = document.querySelector("#colors").value;
 
-        const addBacket = () => {
-          let addButton = document.querySelector("#addToCart");
+        function saveBasket(basket) {
+          localStorage.setItem("basket", JSON.stringify(basket));
+        }
 
-          let majPanier = {
+        function getBasket() {
+          let basket = localStorage.getItem("basket");
+
+          if (basket == null) {
+            return [];
+          } else {
+            return JSON.parse(basket);
+          }
+        }
+
+        function addBasket(product) {
+          product = {
             id: window.location.search.split("?id=").join(""),
             color: productData.color,
-            quantity: document.querySelector("#quantity").value,
+            quantity: productData.quantity,
           };
-          // for (let i = 0; i < localStorage.length; i++) {
-          if (
-            panierInit.length == 0 ||
-            (panierInit[i] &&
-              panierInit[i].id &&
-              panierInit[i].id !== id &&
-              panierInit[i].color !== productData.color)
-          ) {
-            console.log("true");
-            panierInit.push(majPanier),
-              localStorage.setItem("itemArray", JSON.stringify(panierInit));
-            i++;
-          } else {
-            console.log("false");
+          let basket = getBasket();
 
-            panierInit[i].quantity =
-              parseInt(panierInit[i].quantity) + parseInt(majPanier.quantity);
-            localStorage.setItem("itemArray", JSON.stringify(panierInit));
+          let foundProduct = basket.find((p) => p.id == product.id);
+          //console.log(foundProduct.id);
+          if (basket.length == 0) {
+            console.log("Premier produit dans le panier");
+            basket.push(product);
+          } else {
+            //for (let i = 0; i < basket.length; i++) {
+            if (
+              id == foundProduct.id &&
+              productData.color == foundProduct.color
+            ) {
+              console.log("Quantité ajouté");
+              foundProduct.quantity += productData.quantity;
+              localStorage.setItem("basket", JSON.stringify(product));
+            } else if (foundProduct.id == undefined) {
+              basket.push(product);
+            }
+            // }
+            //product.quantity += productData.quantity;
+
+            //basket.push(product);
+
+            //basket.push(product);
           }
-          console.log(i);
-        };
-        // };
-        addBacket();
+          //}
+          saveBasket(basket);
+        }
+
+        addBasket();
       });
     });
 };

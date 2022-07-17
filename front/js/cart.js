@@ -2,7 +2,7 @@ let productData = [];
 let panier = [];
 let price = 0;
 let totalQuantity = 0;
-panier = JSON.parse(localStorage.getItem("itemArray"));
+panier = JSON.parse(localStorage.getItem("basket"));
 
 // Message si le panier est vide
 if (panier === null) {
