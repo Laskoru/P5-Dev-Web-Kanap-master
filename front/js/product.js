@@ -61,16 +61,19 @@ const fetchProduct = async () => {
             color: productData.color,
             quantity: productData.quantity,
           };
+          //Récupération du panier
           let basket = getBasket();
-
+          // Variable comparant si un produit similaire avec une couleur similaire
+          // existe déja dans le panier
           let foundProduct = basket.find(
             (p) => p.id == id && p.color == productData.color
           );
-
+          // si aucun produit n'est trouvé, ajout du produit
           if (foundProduct == undefined) {
             console.log("Premier produit dans le panier");
             basket.push(product);
           } else {
+            // si un produit similaire est trouvé, ajoute la quantité
             console.log("Quantité ajouté à un produit existant");
             foundProduct.quantity += productData.quantity;
           }

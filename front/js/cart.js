@@ -2,13 +2,14 @@ let productData = [];
 let basket = [];
 let price = 0;
 let totalQuantity = 0;
+// Récupération du panier dans le localStorage
 basket = JSON.parse(localStorage.getItem("basket"));
 
 // Message si le basket est vide
 if (basket === null) {
   document.querySelector(
     "#cartAndFormContainer"
-  ).innerHTML = `<h1>Votre basket est vide</h1>`;
+  ).innerHTML = `<h1>Votre panier est vide</h1>`;
 
   // Sinon, affichage du basket
 } else {
@@ -40,7 +41,7 @@ if (basket === null) {
           <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${quantity}">
         </div>
         <div class="cart__item__content__settings__delete">
-          <p class="deleteItem">Supprimer</p>
+          <p class="deleteItem" onclick="deleteItem()">Supprimer</p>
         </div>
       </div>
     </div>
@@ -57,12 +58,19 @@ if (basket === null) {
     fetchProduct();
   }
 }
-
+let deleteProducts = document.getElementsByClassName("deleteItem");
+//console.log(deleteProducts);
 function deleteItem() {
-  let deleteItem = document.querySelector("#deleteItem");
-  deleteItem.addEventListener("click", () => {
-    localStorage.removeItem(basket[i]);
+  for (let i in deleteProducts) {
+    basket.splice(i, 1);
+    //basket = basket.filter((p) => p.id != basket.id);
+    localStorage.setItem("basket", JSON.stringify(basket));
+    console.log(basket);
     window.location.reload();
-  });
+    break;
+  }
+  if (basket.length == 0) {
+    localStorage.clear("basket");
+    window.location.reload();
+  }
 }
-onload = deleteItem();
