@@ -58,12 +58,13 @@ if (basket === null) {
     fetchProduct();
   }
 }
+
+//----------------Fonction pour supprimer un produit------------------//
 let deleteProducts = document.getElementsByClassName("deleteItem");
-//console.log(deleteProducts);
+
 function deleteItem() {
-  for (let i in deleteProducts) {
+  for (i = 0; i < deleteProducts.length; i++) {
     basket.splice(i, 1);
-    //basket = basket.filter((p) => p.id != basket.id);
     localStorage.setItem("basket", JSON.stringify(basket));
     console.log(basket);
     window.location.reload();
