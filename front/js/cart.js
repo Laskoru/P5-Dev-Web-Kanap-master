@@ -2,6 +2,7 @@ let productData = [];
 let basket = [];
 let price = 0;
 let totalQuantity = 0;
+
 // Récupération du panier dans le localStorage
 basket = JSON.parse(localStorage.getItem("basket"));
 
@@ -59,16 +60,32 @@ if (basket === null) {
   }
 }
 
+function getBasket() {
+  let basket = [];
+  basket = localStorage.getItem("basket");
+
+  if (basket == null) {
+    return [];
+  } else {
+    return JSON.parse(basket);
+  }
+}
+
 //----------------Fonction pour supprimer un produit------------------//
-let deleteProducts = document.getElementsByClassName("deleteItem");
+
+//let deleteProducts = document.getElementsByClassName("deleteItem");
 
 function deleteItem() {
-  for (i = 0; i < deleteProducts.length; i++) {
-    basket.splice(i, 1);
-    localStorage.setItem("basket", JSON.stringify(basket));
-    console.log(basket);
-    window.location.reload();
-    break;
+  for (i = 0; i < basket.length; i++) {
+    let id = basket[i].id;
+    let color = basket[i].color;
+    if (id == basket[i].id && color == basket[i].color) {
+      basket.splice(i, 1);
+      localStorage.setItem("basket", JSON.stringify(basket));
+      console.log(basket);
+      window.location.reload();
+      break;
+    }
   }
   if (basket.length == 0) {
     localStorage.clear("basket");
