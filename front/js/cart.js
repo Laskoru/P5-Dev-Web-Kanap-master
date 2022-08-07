@@ -105,7 +105,6 @@ function deleteItem() {
 function changeQuantity() {
   let changeQuantity = document.querySelectorAll(".itemQuantity");
   changeQuantity.forEach((item) => {
-    // item.addEventListener("change", () => {
     let basket = JSON.parse(localStorage.getItem("basket"));
     for (let i in basket) {
       if (
@@ -118,104 +117,153 @@ function changeQuantity() {
           (window.location.href = "cart.html");
       }
     }
-    //});
   });
 }
-// function saveContact(contact) {
-//   localStorage.setItem("contact", JSON.stringify(contact));
-// }
-// function addContact(contact) {
-//   contact = {
-//     prénom: firstName.value,
-//     nom: lastName.value,
-//     addresse: address.value,
-//     ville: city.value,
-//     email: email.value,
-//   };
-//   saveContact(contact);
-// }
-//function checkForm() {
+function saveContact(contact) {
+  localStorage.setItem("contact", JSON.stringify(contact));
+}
+function addContact(contact) {
+  contact = {
+    prénom: firstName.value,
+    nom: lastName.value,
+    addresse: address.value,
+    ville: city.value,
+    email: email.value,
+  };
+  saveContact(contact);
+}
+
 let form = document.querySelector(".cart__order__form");
-let confirm = document.querySelector("#order");
+let confirm = document.getElementById("order");
 let firstName = document.getElementById("firstName");
 let lastName = document.getElementById("lastName");
 let address = document.getElementById("address");
 let city = document.getElementById("city");
 let email = document.getElementById("email");
-
-// const regexAddress = /^[#.0-9a-zA-Z\s,-]+$/;
-// const regexEmail =
-//   /^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/;
-// const regexName = /^[a-z ,.'-]+$/i;
-// const checkFirstName = /^[a-zA-Z]+[a-zA-Z]+$/.test(firstName);
-// const checkLastName = /^[a-zA-Z]+[a-zA-Z]+$/.test(lastName);
-// const checkAddress = /^[#.0-9a-zA-Z\s,-]+$/.test(address);
-// const checkCity = /^[a-zA-Z]+[a-zA-Z]+$/.test(city);
-// const checkEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
-//   email.value
-// );
+let checkFirstName = "";
+let checkLastName = "";
+let checkAddress = "";
+let checkCity = "";
+let checkEmail = "";
 
 //--- FONCTION POUR VALIDER LE PRENOM ---//
 
 function validateFirstName() {
-  if (/^[a-zA-Z\u00C0-\u00FF ,.'-]+$/.test(firstName.value) == true) {
-    console.log("Prénom ok");
-    return true;
-  } else {
-    console.log("Prénom non ok");
-    return false;
-  }
+  firstName.addEventListener("change", () => {
+    if (/^[a-zA-Z\u00C0-\u00FF ,.'-]+$/.test(firstName.value) == true) {
+      console.log("Prénom valide");
+      document.getElementById("firstNameErrorMsg").innerText = null;
+      firstName.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
+      checkFirstName = "ok";
+      //return true;
+    } else {
+      console.log("Prénom invalide");
+      document.getElementById("firstNameErrorMsg").innerText =
+        "Veuillez renseigner un prénom valide";
+      firstName.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      return false;
+    }
+  });
 }
 validateFirstName();
 
 //--- FONCTION POUR VALIDER LE NOM ---//
 
 function validateLastName() {
-  if (/^[a-zA-Z\u00C0-\u00FF ,.'-]+$/.test(lastName.value) == true) {
-    console.log("Nom ok");
-    return true;
-  } else {
-    console.log("Nom non ok");
-    return false;
-  }
+  lastName.addEventListener("change", () => {
+    if (/^[a-zA-Z\u00C0-\u00FF ,.'-]+$/.test(lastName.value) == true) {
+      console.log("Nom valide");
+      document.getElementById("lastNameErrorMsg").innerText = null;
+      lastName.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
+      checkLastName = "ok";
+      //return true;
+    } else {
+      console.log("Nom invalide");
+      document.getElementById("lastNameErrorMsg").innerText =
+        "Veuillez renseigner un nom valide";
+      lastName.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      return false;
+    }
+  });
 }
 validateLastName();
 
 //--- FONCTION POUR VALIDER L'ADRESSE ---//
 
 function validateAddress() {
-  if (/^[#.0-9a-zA-Z\s,-]+$/.test(address.value) == true) {
-    console.log("Adresse ok");
-    return true;
-  } else {
-    console.log("Adresse non ok");
-    return false;
-  }
+  address.addEventListener("change", () => {
+    if (/^[#.0-9a-zA-Z\s,-]+$/.test(address.value) == true) {
+      console.log("Adresse valide");
+      document.getElementById("addressErrorMsg").innerText = null;
+      address.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
+      checkAddress = "ok";
+    } else {
+      console.log("Adresse invalide");
+      document.getElementById("addressErrorMsg").innerText =
+        "Veuillez renseigner une adresse valide";
+      address.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      return false;
+    }
+  });
 }
 validateAddress();
 
 //--- FONCTION POUR VALIDER LA VILLE ---//
 
 function validateCity() {
-  if (/^[a-zA-Z\u00C0-\u00FF]+$/.test(city.value) == true) {
-    console.log("Ville ok");
-    return true;
-  } else {
-    console.log("Ville non ok");
-    return false;
-  }
+  city.addEventListener("change", () => {
+    if (/^[a-zA-Z\u00C0-\u00FF]+$/.test(city.value) == true) {
+      console.log("Ville valide");
+      document.getElementById("cityErrorMsg").innerText = null;
+      city.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
+      checkCity = "ok";
+      //return true;
+    } else {
+      console.log("Ville invalide");
+      document.getElementById("cityErrorMsg").innerText =
+        "Veuillez renseigner une ville valide";
+      city.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      return false;
+    }
+  });
 }
 validateCity();
 
 //--- FONCTION POUR VALIDER L'EMAIL ---//
 
 function validateEmail() {
-  if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email.value) == true) {
-    console.log("Email ok");
-    return true;
-  } else {
-    console.log("Email non ok");
-    return false;
-  }
+  email.addEventListener("change", () => {
+    if (/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email.value) == true) {
+      console.log("Email valide");
+      document.getElementById("emailErrorMsg").innerText = null;
+      email.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
+      checkEmail = "ok";
+      //return true;
+    } else {
+      console.log("Email invalide");
+      document.getElementById("emailErrorMsg").innerText =
+        "Veuillez renseigner un email valide";
+      email.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      return false;
+    }
+  });
 }
 validateEmail();
+
+function validateForm() {
+  confirm.addEventListener("click", () => {
+    if (
+      checkFirstName == "ok" &&
+      checkLastName == "ok" &&
+      checkAddress == "ok" &&
+      checkCity == "ok" &&
+      checkEmail == "ok"
+    ) {
+      console.log("test ok");
+      addContact();
+    } else {
+      console.log("test non ok");
+    }
+  });
+}
+validateForm();
