@@ -119,19 +119,19 @@ function changeQuantity() {
     }
   });
 }
-function saveContact(contact) {
-  localStorage.setItem("contact", JSON.stringify(contact));
-}
-function addContact(contact) {
-  contact = {
-    prénom: firstName.value,
-    nom: lastName.value,
-    addresse: address.value,
-    ville: city.value,
-    email: email.value,
-  };
-  saveContact(contact);
-}
+// function saveContact(contact) {
+//   localStorage.setItem("contact", JSON.stringify(contact));
+// }
+// function addContact(contact) {
+//   contact = {
+//     prénom: firstName.value,
+//     nom: lastName.value,
+//     addresse: address.value,
+//     ville: city.value,
+//     email: email.value,
+//   };
+//   saveContact(contact);
+// }
 
 let form = document.querySelector(".cart__order__form");
 let confirm = document.getElementById("order");
@@ -250,6 +250,37 @@ function validateEmail() {
 }
 validateEmail();
 
+async function order() {
+  const objectCommand = {
+    contact: {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      address: address.value,
+      city: city.value,
+      email: email.value,
+    },
+
+    products: [basket[0].id],
+  };
+  let fetchOption = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    body: JSON.stringify(objectCommand),
+  };
+  fetch("http://localhost:3000/api/products/order", fetchOption)
+    .then((response) => response.json())
+    .then(function (data) {
+      //localStorage.clear();
+      let orderId = data.orderId;
+      console.log(response.json());
+      //window.location.assign(`confirmation.html?orderId=${orderId}`);
+    });
+}
+
+//--- FONCTION POUR VALIDER LE FORMULAIRE ---//
+
 function validateForm() {
   confirm.addEventListener("click", () => {
     if (
@@ -260,7 +291,7 @@ function validateForm() {
       checkEmail == "ok"
     ) {
       console.log("test ok");
-      addContact();
+      order();
     } else {
       console.log("test non ok");
     }
