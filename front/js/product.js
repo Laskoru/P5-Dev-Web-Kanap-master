@@ -3,6 +3,8 @@ let id = window.location.search.split("?id=").join("");
 //
 let productData = [];
 
+//--- AFFICHAGE DU PRODUIT EN RECUPERANT L'ID DANS L'ADRESSE HTML ---//
+
 const fetchProduct = async () => {
   await fetch(`http://localhost:3000/api/products/${id}`)
     .then((res) => res.json())
@@ -36,10 +38,14 @@ const fetchProduct = async () => {
 
         productData.color = document.querySelector("#colors").value;
 
-        // Fonction servant à sauvegarder le panier dans le localstorage //
+        // Fonction servant à sauvegarder le panier dans le localstorage ( si une couleur est selectionné et quantité > 0) //
 
         function saveBasket(basket) {
-          localStorage.setItem("basket", JSON.stringify(basket));
+          if (productData.color == "" || productData.quantity == 0) {
+            alert("Veuillez sélectionner une couleur et une quantité");
+          } else {
+            localStorage.setItem("basket", JSON.stringify(basket));
+          }
         }
 
         // Fonction servant à récupérer le panier dans le localstorage //
@@ -53,6 +59,7 @@ const fetchProduct = async () => {
             return JSON.parse(basket);
           }
         }
+
         // Fonction servant à ajouter des produits dans le localstorage //
 
         function addBasket(product) {
@@ -61,6 +68,7 @@ const fetchProduct = async () => {
             color: productData.color,
             quantity: productData.quantity,
           };
+
           //Récupération du panier
           let basket = getBasket();
           // Variable comparant si un produit similaire avec une couleur similaire
@@ -70,17 +78,19 @@ const fetchProduct = async () => {
           );
           // si aucun produit n'est trouvé, ajout du produit
           if (foundProduct == undefined) {
-            console.log("Premier produit dans le panier");
             basket.push(product);
           } else {
             // si un produit similaire est trouvé, ajoute la quantité
-            console.log("Quantité ajouté à un produit existant");
             foundProduct.quantity += productData.quantity;
           }
+          //alert("${productData.quantity}");
           saveBasket(basket);
         }
 
         addBasket();
+        alert(
+          `${productData.quantity} ${productData.name} Ajouté(s) au panier`
+        );
       });
     });
 };

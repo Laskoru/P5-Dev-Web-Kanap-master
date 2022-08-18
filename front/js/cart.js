@@ -102,6 +102,8 @@ function deleteItem() {
   });
 }
 
+//--- FONCTION SERVANT A CHANGER LA QUANTITE DANS LA PAGE PANIER ---//
+
 function changeQuantity() {
   let changeQuantity = document.querySelectorAll(".itemQuantity");
   changeQuantity.forEach((item) => {
@@ -119,19 +121,6 @@ function changeQuantity() {
     }
   });
 }
-// function saveContact(contact) {
-//   localStorage.setItem("contact", JSON.stringify(contact));
-// }
-// function addContact(contact) {
-//   contact = {
-//     prénom: firstName.value,
-//     nom: lastName.value,
-//     addresse: address.value,
-//     ville: city.value,
-//     email: email.value,
-//   };
-//   saveContact(contact);
-// }
 
 let form = document.querySelector(".cart__order__form");
 let confirm = document.getElementById("order");
@@ -161,7 +150,6 @@ function validateFirstName() {
       document.getElementById("firstNameErrorMsg").innerText =
         "Veuillez renseigner un prénom valide";
       firstName.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
-      return false;
     }
   });
 }
@@ -182,7 +170,6 @@ function validateLastName() {
       document.getElementById("lastNameErrorMsg").innerText =
         "Veuillez renseigner un nom valide";
       lastName.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
-      return false;
     }
   });
 }
@@ -202,7 +189,6 @@ function validateAddress() {
       document.getElementById("addressErrorMsg").innerText =
         "Veuillez renseigner une adresse valide";
       address.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
-      return false;
     }
   });
 }
@@ -223,7 +209,6 @@ function validateCity() {
       document.getElementById("cityErrorMsg").innerText =
         "Veuillez renseigner une ville valide";
       city.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
-      return false;
     }
   });
 }
@@ -244,39 +229,41 @@ function validateEmail() {
       document.getElementById("emailErrorMsg").innerText =
         "Veuillez renseigner un email valide";
       email.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
-      return false;
     }
   });
 }
 validateEmail();
 
-async function order() {
-  const objectCommand = {
-    contact: {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      address: address.value,
-      city: city.value,
-      email: email.value,
-    },
+//--- FONCTION POUR EFFECTUER UNE REQUETE POST AVEC LES INFOS DE CONTACT AINSI QUE L'ID DES PRODUITS ---//
 
-    products: [basket[0].id],
-  };
-  let fetchOption = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=UTF-8",
-    },
-    body: JSON.stringify(objectCommand),
-  };
-  fetch("http://localhost:3000/api/products/order", fetchOption)
-    .then((response) => response.json())
-    .then(function (data) {
-      //localStorage.clear();
-      let orderId = data.orderId;
-      console.log(response.json());
-      //window.location.assign(`confirmation.html?orderId=${orderId}`);
-    });
+async function order() {
+  for (let i in basket) {
+    const objectCommand = {
+      contact: {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        address: address.value,
+        city: city.value,
+        email: email.value,
+      },
+      products: [basket[i].id],
+    };
+    let fetchOption = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+      body: JSON.stringify(objectCommand),
+    };
+    fetch("http://localhost:3000/api/products/order", fetchOption)
+      .then((response) => response.json())
+      .then((json) => {
+        let orderId = json.orderId;
+        window.location.assign(`confirmation.html?orderId=${orderId}`);
+        localStorage.clear();
+        console.log(json);
+      });
+  }
 }
 
 //--- FONCTION POUR VALIDER LE FORMULAIRE ---//
