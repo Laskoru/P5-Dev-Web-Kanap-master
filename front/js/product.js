@@ -88,9 +88,11 @@ const fetchProduct = async () => {
         }
 
         addBasket();
-        alert(
-          `${productData.quantity} ${productData.name} Ajouté(s) au panier`
-        );
+        if (productData.quantity > 0) {
+          alert(
+            `${productData.quantity} ${productData.name} Ajouté(s) au panier`
+          );
+        }
       });
     });
 };

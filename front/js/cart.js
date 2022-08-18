@@ -144,12 +144,12 @@ function validateFirstName() {
       document.getElementById("firstNameErrorMsg").innerText = null;
       firstName.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
       checkFirstName = "ok";
-      //return true;
     } else {
       console.log("Prénom invalide");
       document.getElementById("firstNameErrorMsg").innerText =
         "Veuillez renseigner un prénom valide";
       firstName.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      checkFirstName = "non ok";
     }
   });
 }
@@ -164,12 +164,12 @@ function validateLastName() {
       document.getElementById("lastNameErrorMsg").innerText = null;
       lastName.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
       checkLastName = "ok";
-      //return true;
     } else {
       console.log("Nom invalide");
       document.getElementById("lastNameErrorMsg").innerText =
         "Veuillez renseigner un nom valide";
       lastName.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      checkLastName = "non ok";
     }
   });
 }
@@ -189,6 +189,7 @@ function validateAddress() {
       document.getElementById("addressErrorMsg").innerText =
         "Veuillez renseigner une adresse valide";
       address.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      checkAddress = "non ok";
     }
   });
 }
@@ -203,12 +204,12 @@ function validateCity() {
       document.getElementById("cityErrorMsg").innerText = null;
       city.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
       checkCity = "ok";
-      //return true;
     } else {
       console.log("Ville invalide");
       document.getElementById("cityErrorMsg").innerText =
         "Veuillez renseigner une ville valide";
       city.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      checkCity = "non ok";
     }
   });
 }
@@ -223,20 +224,42 @@ function validateEmail() {
       document.getElementById("emailErrorMsg").innerText = null;
       email.style.border = "solid 2px rgba(0, 255, 0, 0.75)";
       checkEmail = "ok";
-      //return true;
     } else {
       console.log("Email invalide");
       document.getElementById("emailErrorMsg").innerText =
         "Veuillez renseigner un email valide";
       email.style.border = "solid 2px rgba(255, 0, 0, 0.75)";
+      checkEmail = "non ok";
     }
   });
 }
 validateEmail();
 
+//--- FONCTION POUR VALIDER LE FORMULAIRE ---//
+
+function validateForm() {
+  confirm.addEventListener("click", (e) => {
+    if (
+      checkFirstName == "ok" &&
+      checkLastName == "ok" &&
+      checkAddress == "ok" &&
+      checkCity == "ok" &&
+      checkEmail == "ok"
+    ) {
+      console.log("test ok");
+      order();
+    } else {
+      console.log("test non ok");
+      alert("Veuillez vérifiez vos informations de contact");
+      e.preventDefault();
+    }
+  });
+}
+validateForm();
+
 //--- FONCTION POUR EFFECTUER UNE REQUETE POST AVEC LES INFOS DE CONTACT AINSI QUE L'ID DES PRODUITS ---//
 
-async function order() {
+function order() {
   for (let i in basket) {
     const objectCommand = {
       contact: {
@@ -265,23 +288,3 @@ async function order() {
       });
   }
 }
-
-//--- FONCTION POUR VALIDER LE FORMULAIRE ---//
-
-function validateForm() {
-  confirm.addEventListener("click", () => {
-    if (
-      checkFirstName == "ok" &&
-      checkLastName == "ok" &&
-      checkAddress == "ok" &&
-      checkCity == "ok" &&
-      checkEmail == "ok"
-    ) {
-      console.log("test ok");
-      order();
-    } else {
-      console.log("test non ok");
-    }
-  });
-}
-validateForm();
