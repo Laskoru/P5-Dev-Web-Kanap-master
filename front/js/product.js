@@ -90,7 +90,7 @@ const fetchProduct = async () => {
         addBasket();
         if (productData.quantity > 0) {
           alert(
-            `${productData.quantity} ${productData.name} Ajouté(s) au panier`
+            `${productData.quantity} ${productData.name} ${productData.color} Ajouté(s) au panier`
           );
         }
       });
