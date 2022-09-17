@@ -1,6 +1,8 @@
+//--- DECLARATION D'UNE CONSTANTE POUR POUVOIR AFFICHER LES PRODUITS AU BON ENDROIT
+
 const items = document.querySelector("#items");
 
-//--- FONCTION POUR REQUETER L'API ET AAFICHER LES PRODUITS SUR LA PAGE D'ACCUEIL ---//
+//--- FONCTION POUR REQUETER L'API ET AFFICHER LES PRODUITS SUR LA PAGE D'ACCUEIL ---//
 
 fetch("http://localhost:3000/api/products/").then((response) => {
   if (response.ok) {

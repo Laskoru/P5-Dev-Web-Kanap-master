@@ -7,7 +7,7 @@ let totalQuantity = 0;
 basket = JSON.parse(localStorage.getItem("basket"));
 
 // Message si le basket est vide
-if (basket === null) {
+if (basket.length == 0) {
   document.querySelector(
     "#cartAndFormContainer"
   ).innerHTML = `<h1>Votre panier est vide</h1>`;
@@ -42,7 +42,7 @@ if (basket === null) {
           <input type="number" class="itemQuantity" onchange="changeQuantity()"  data-id="${id}" data-color="${color}" data-quantity="${quantity} name="itemQuantity" min="1" max="100" value="${quantity}">
         </div>
         <div class="cart__item__content__settings__delete">
-          <p class="deleteItem" onclick="deleteItem()" data-id="${id}" data-color="${color}">Supprimer</p>
+          <p class="deleteItem" onload="deleteItem()"data-id="${id}" data-color="${color}">Supprimer</p>
         </div>
       </div>
     </div>
@@ -54,6 +54,27 @@ if (basket === null) {
       // Calcul de la quantité total
       totalQuantity += parseInt(quantity);
       document.querySelector("#totalQuantity").innerHTML = totalQuantity;
+
+      //----------------FONCTION SERVANT A SUPPRIMER UN PRODUIT------------------//
+
+      function deleteItem() {
+        let products = document.querySelectorAll(".deleteItem");
+
+        for (let product of products) {
+          product.addEventListener("click", () => {
+            let id = product.dataset.id;
+            let color = product.dataset.color;
+            let deleteItem = basket.find(
+              (element) => element.id == id && element.color == color
+            );
+
+            (basket = basket.filter((item) => item != deleteItem)),
+              localStorage.setItem("basket", JSON.stringify(basket));
+            window.location.href = "cart.html";
+          });
+        }
+      }
+      deleteItem();
     };
 
     fetchProduct();
@@ -69,40 +90,8 @@ if (basket === null) {
     }
   }
 }
-//----------------Fonction pour supprimer un produit------------------//
 
-function deleteItem() {
-  let deleteItem = document.querySelectorAll(".deleteItem");
-  deleteItem.forEach((item) => {
-    item.addEventListener("click", () => {
-      let basket = JSON.parse(localStorage.getItem("basket"));
-      if (basket.length === 1) {
-        return (
-          localStorage.removeItem("basket"),
-          (window.location.href = "cart.html")
-        );
-      } else {
-        for (let i in basket) {
-          if (
-            basket[i].id !== item.dataset.id ||
-            basket[i].color !== item.dataset.color
-          ) {
-            return (
-              (deleted = basket.filter(
-                (e) =>
-                  e.id !== item.dataset.id || e.color !== item.dataset.color
-              )),
-              localStorage.setItem("basket", JSON.stringify(deleted)),
-              (window.location.href = "cart.html")
-            );
-          }
-        }
-      }
-    });
-  });
-}
-
-//--- FONCTION SERVANT A CHANGER LA QUANTITE DANS LA PAGE PANIER ---//
+//----------------FONCTION SERVANT A MODIFIER LA QUANTITE D'UN PRODUIT------------------//
 
 function changeQuantity() {
   let changeQuantity = document.querySelectorAll(".itemQuantity");
@@ -114,13 +103,14 @@ function changeQuantity() {
         basket[i].color == item.dataset.color
       ) {
         (basket[i].quantity = parseInt(changeQuantity[i].value)),
-          localStorage.setItem("basket", JSON.stringify(basket)),
-          console.log(changeQuantity[i].value),
-          (window.location.href = "cart.html");
+          localStorage.setItem("basket", JSON.stringify(basket));
+        window.location.href = "cart.html";
       }
     }
   });
 }
+
+//--- DECLARATION DES DIFFERENTES VARIABLES QUI SERVIRONT A LA PARTIE FORMULAIRE ---//
 
 let form = document.querySelector(".cart__order__form");
 let confirm = document.getElementById("order");
@@ -246,10 +236,9 @@ function validateForm() {
       checkCity == "ok" &&
       checkEmail == "ok"
     ) {
-      console.log("test ok");
+      e.preventDefault();
       order();
     } else {
-      console.log("test non ok");
       alert("Veuillez vérifiez vos informations de contact");
       e.preventDefault();
     }
@@ -282,9 +271,10 @@ function order() {
       .then((response) => response.json())
       .then((json) => {
         let orderId = json.orderId;
+        // renvoie vers la page de confirmation avec l'id de la commande //
         window.location.assign(`confirmation.html?orderId=${orderId}`);
+        // suppression du localStorage //
         localStorage.clear();
-        console.log(json);
       });
   }
 }
