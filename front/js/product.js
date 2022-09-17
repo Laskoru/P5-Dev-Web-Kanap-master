@@ -26,6 +26,9 @@ const fetchProduct = async () => {
           "#colors"
         ).innerHTML += `<option value=${color}>${color}</option>`;
       }
+
+      // addEventListener click sur le bouton "Ajouter au panier" //
+
       document.querySelector("#addToCart").addEventListener("click", () => {
         document.querySelector("#quantity").reportValidity();
         productData.quantity = parseInt(
