@@ -7,7 +7,7 @@ let totalQuantity = 0;
 basket = JSON.parse(localStorage.getItem("basket"));
 
 // Message si le basket est vide
-if (basket.length == 0) {
+if (basket == null) {
   document.querySelector(
     "#cartAndFormContainer"
   ).innerHTML = `<h1>Votre panier est vide</h1>`;
