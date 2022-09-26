@@ -11,7 +11,7 @@ const fetchProduct = async () => {
       let item = document.querySelector(".item");
       item.querySelector(
         ".item__img"
-      ).innerHTML = `<img src="${productData.imageUrl}" alt="${productData.name}">`;
+      ).innerHTML = `<img src="${productData.imageUrl}" alt="${productData.altTxt}">`;
       item.querySelector(
         ".item__content__titlePrice"
       ).innerHTML = `<h1 id="title">${productData.name}</h1>

@@ -27,7 +27,7 @@ if (basket == null || basket.length == 0) {
             "#cart__items"
           ).innerHTML += `<article class="cart__item" data-id="${id}" data-color="${basket.color}">
     <div class="cart__item__img">
-      <img src="${productData.imageUrl}" alt="${productData.name}">
+      <img src="${productData.imageUrl}" alt="${productData.altTxt}">
     </div>
     <div class="cart__item__content">
       <div class="cart__item__content__description">
