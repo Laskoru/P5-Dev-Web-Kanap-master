@@ -1,9 +1,7 @@
-// Variable servant à récupérer l'ID de la page html
+//--- Get ID in html address ---//
 let id = window.location.search.split("?id=").join("");
-//
+//--- Array of product description ---//
 let productData = [];
-
-//--- AFFICHAGE DU PRODUIT EN RECUPERANT L'ID DANS L'ADRESSE HTML ---//
 
 const fetchProduct = async () => {
   await fetch(`http://localhost:3000/api/products/${id}`)
@@ -27,8 +25,6 @@ const fetchProduct = async () => {
         ).innerHTML += `<option value=${color}>${color}</option>`;
       }
 
-      // addEventListener click sur le bouton "Ajouter au panier" //
-
       document.querySelector("#addToCart").addEventListener("click", () => {
         document.querySelector("#quantity").reportValidity();
         productData.quantity = parseInt(
@@ -41,21 +37,20 @@ const fetchProduct = async () => {
 
         productData.color = document.querySelector("#colors").value;
 
-        // Fonction servant à sauvegarder le panier dans le localstorage ( si une couleur est selectionné et quantité > 0) //
+        //--- Save basket in localStorage ---//
 
         function saveBasket(basket) {
-          if (productData.color == "" || productData.quantity == 0) {
-            alert("Veuillez sélectionner une couleur et une quantité");
+          if (productData.color == "" || productData.quantity < 1) {
+            return;
           } else {
             localStorage.setItem("basket", JSON.stringify(basket));
           }
         }
 
-        // Fonction servant à récupérer le panier dans le localstorage //
+        //--- Get Basket in localStorage ---//
 
         function getBasket() {
           let basket = localStorage.getItem("basket");
-
           if (basket == null) {
             return [];
           } else {
@@ -63,7 +58,7 @@ const fetchProduct = async () => {
           }
         }
 
-        // Fonction servant à ajouter des produits dans le localstorage //
+        //--- Add a product in cart ---//
 
         function addBasket(product) {
           product = {
@@ -72,31 +67,24 @@ const fetchProduct = async () => {
             quantity: productData.quantity,
           };
 
-          //Récupération du panier
           let basket = getBasket();
-          // Variable comparant si un produit similaire avec une couleur similaire
-          // existe déja dans le panier
+
           let foundProduct = basket.find(
             (p) => p.id == id && p.color == productData.color
           );
-          // si aucun produit n'est trouvé, ajout du produit
+
           if (foundProduct == undefined) {
             basket.push(product);
           } else {
-            // si un produit similaire est trouvé, ajoute la quantité
             foundProduct.quantity += productData.quantity;
           }
-          //alert("${productData.quantity}");
+
           saveBasket(basket);
         }
 
         addBasket();
-        if (productData.quantity > 0) {
-          alert(
-            `${productData.quantity} ${productData.name} ${productData.color} Ajouté(s) au panier`
-          );
-        }
       });
     });
 };
+
 fetchProduct();
