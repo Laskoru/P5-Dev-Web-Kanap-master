@@ -94,11 +94,13 @@ function changeQuantity() {
     for (let i in basket) {
       if (
         basket[i].id == item.dataset.id &&
-        basket[i].color == item.dataset.color
+        basket[i].color == item.dataset.color &&
+        changeQuantity[i].value >= 1
       ) {
         (basket[i].quantity = parseInt(changeQuantity[i].value)),
           localStorage.setItem("basket", JSON.stringify(basket));
-
+        location.reload();
+      } else {
         location.reload();
       }
     }
