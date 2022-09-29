@@ -16,7 +16,7 @@ if (basket == null || basket.length == 0) {
     let quantity = basket[i].quantity;
     let color = basket[i].color;
 
-    //--- fetch to get description of cart ---//
+    //--- Cart display ---//
 
     const fetchProduct = async () => {
       await fetch(`http://localhost:3000/api/products/${basket[i].id}`)
@@ -105,7 +105,7 @@ function changeQuantity() {
   });
 }
 
-//---  ---//
+//--- Declaration of variables used for form and REGEX ---//
 
 let form = document.querySelector(".cart__order__form");
 let confirm = document.getElementById("order");
