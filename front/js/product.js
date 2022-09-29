@@ -3,6 +3,8 @@ let id = window.location.search.split("?id=").join("");
 //--- Array of product description ---//
 let productData = [];
 
+//--- Displays a product with its description ---//
+
 const fetchProduct = async () => {
   await fetch(`http://localhost:3000/api/products/${id}`)
     .then((res) => res.json())
@@ -40,7 +42,11 @@ const fetchProduct = async () => {
         //--- Save basket in localStorage ---//
 
         function saveBasket(basket) {
-          if (productData.color == "" || productData.quantity < 1) {
+          if (
+            productData.color == "" ||
+            productData.quantity < 1 ||
+            !productData.quantity
+          ) {
             return;
           } else {
             localStorage.setItem("basket", JSON.stringify(basket));
