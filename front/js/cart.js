@@ -18,7 +18,7 @@ if (basket == null || basket.length == 0) {
 
     //--- Cart display ---//
 
-    const fetchProduct = async () => {
+    async function fetchProduct() {
       await fetch(`http://localhost:3000/api/products/${basket[i].id}`)
         .then((res) => res.json())
         .then((promise) => {
@@ -79,7 +79,7 @@ if (basket == null || basket.length == 0) {
         }
       }
       deleteItem();
-    };
+    }
 
     fetchProduct();
   }
